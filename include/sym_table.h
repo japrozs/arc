@@ -4,6 +4,8 @@
 #include "arc.h"
 #include "llvm_cfg.h"
 
+#define TABLE_SIZE 20
+
 typedef enum
 {
 	SYMBOL_VAR,
@@ -18,6 +20,8 @@ typedef struct
 } symbol_t;
 
 void init_table();
-void set_symbol(symbol_type type, char* name, LLVMValueRef value);
+void set_symbol(symbol_type type, char *name, LLVMValueRef value);
+symbol_t *get_symbol(char *name);
+void print_table();
 
 #endif // SYM_TABLE_H

@@ -1,6 +1,7 @@
 #include "arc.h"
 #include "components/functions.h"
 #include "components/variables.h"
+#include "sym_table.h"
 #include "parser.h"
 #include "lexer.h"
 

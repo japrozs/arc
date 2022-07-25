@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "arc.h"
 #include "components/variables.h"
+#include "sym_table.h"
 
 void build_str_var(parser_t *parser, char *name)
 {
@@ -13,6 +14,8 @@ void build_str_var(parser_t *parser, char *name)
 		LLVMValueRef str = LLVMAddGlobal(module, str_type, name);
 		LLVMSetInitializer(str, LLVMConstString("", 0, true));
 		LLVMSetGlobalConstant(str, false);
+
+		set_symbol(SYMBOL_VAR, name, str);
 		return;
 	}
 	consume(parser, TOKEN_EQUAL, "expected equal sign for assignment");
@@ -26,7 +29,8 @@ void build_str_var(parser_t *parser, char *name)
 	LLVMSetInitializer(str, LLVMConstString(value, strlen(value), true));
 	LLVMSetGlobalConstant(str, false);
 
-	// TODO: add str to the symtable
+	// DONE: add str to the symtable
+	set_symbol(SYMBOL_VAR, name, str);
 
 	consume(parser, TOKEN_SEMICOLON, "expected a semicolon");
 }
@@ -37,8 +41,8 @@ void build_int_var(parser_t *parser, char *name)
 	if (match(parser, TOKEN_SEMICOLON))
 	{
 		LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name);
-		// todo: add var to symbol table
-		// LLVMBuildStore(builder, LLVMConstInt(LLVMInt32Type(), atoi(value), false), var);
+		// DONE: add var to symbol table
+		set_symbol(SYMBOL_VAR, name, var);
 		return;
 	}
 
@@ -49,6 +53,7 @@ void build_int_var(parser_t *parser, char *name)
 
 	LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name);
 	LLVMBuildStore(builder, LLVMConstInt(LLVMInt32Type(), atoi(value), false), var);
+	set_symbol(SYMBOL_VAR, name, var);
 
 	consume(parser, TOKEN_SEMICOLON, "expected semicolon");
 }
