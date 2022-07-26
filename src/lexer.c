@@ -1,8 +1,29 @@
 #include "lexer.h"
 
-lexer_t *init_lexer(char *source)
+char *read_file(FILE *fp)
+{
+	char *contents;
+	int len;
+	fseek(fp, 0, SEEK_END);
+	len = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+	contents = malloc(sizeof(char) * (len + 1));
+	fread(contents, 1, len, fp);
+	contents[len] = '\0';
+	fclose(fp);
+
+	return contents;
+}
+
+lexer_t *init_lexer(char *path)
 {
 	lexer_t *lexer = malloc(sizeof(lexer_t));
+	lexer->file = fopen(path, "r");
+	char *source = read_file(lexer->file);
+	lexer->source = malloc(sizeof(char) * strlen(source));
+	strcpy(lexer->source, source);
+	lexer->file_name = malloc(sizeof(char) * strlen(path));
+	strcpy(lexer->file_name, path);
 	lexer->start = malloc(sizeof(char) * strlen(source));
 	strcpy(lexer->start, source);
 	lexer->current = malloc(sizeof(char) * strlen(source));
