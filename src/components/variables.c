@@ -18,8 +18,8 @@ void build_str_var(parser_t *parser, char *name)
 		set_symbol(SYMBOL_VAR, name, str);
 		return;
 	}
-	consume(parser, TOKEN_EQUAL, "expected equal sign for assignment");
-	consume(parser, TOKEN_STRING, "expected a string");
+	consume(parser, TOKEN_EQUAL, "expected equal sign for assignment", "try adding a `=` here");
+	consume(parser, TOKEN_STRING, "expected a string", "");
 
 	char *value = malloc(parser->previous->length * sizeof(char));
 	sprintf(value, "%s", parser->previous->start);
@@ -32,7 +32,7 @@ void build_str_var(parser_t *parser, char *name)
 	// DONE: add str to the symtable
 	set_symbol(SYMBOL_VAR, name, str);
 
-	consume(parser, TOKEN_SEMICOLON, "expected a semicolon");
+	consume(parser, TOKEN_SEMICOLON, "expected a semicolon", "try adding a `;` here");
 }
 
 void build_int_var(parser_t *parser, char *name)
@@ -46,8 +46,8 @@ void build_int_var(parser_t *parser, char *name)
 		return;
 	}
 
-	consume(parser, TOKEN_EQUAL, "expected equal sign for assignment");
-	consume(parser, TOKEN_NUMBER, "expected value for variable with type int");
+	consume(parser, TOKEN_EQUAL, "expected equal sign for assignment", "try adding a `=` here");
+	consume(parser, TOKEN_NUMBER, "expected value for variable with type int", "expected an integer value like 6,9,etc.");
 	char *value = malloc(parser->previous->length * sizeof(char));
 	sprintf(value, "%s", parser->previous->start);
 
@@ -55,7 +55,7 @@ void build_int_var(parser_t *parser, char *name)
 	LLVMBuildStore(builder, LLVMConstInt(LLVMInt32Type(), atoi(value), false), var);
 	set_symbol(SYMBOL_VAR, name, var);
 
-	consume(parser, TOKEN_SEMICOLON, "expected semicolon");
+	consume(parser, TOKEN_SEMICOLON, "expected semicolon", "try adding a `;` here");
 }
 
 // void build_float_var(parser_t *parser, char *name)
@@ -70,8 +70,8 @@ void build_int_var(parser_t *parser, char *name)
 // 		// LLVMBuildStore(builder, LLVMConstInt(LLVMInt32Type(), atoi(value), false), var);
 // 		return;
 // 	}
-// 	consume(parser, TOKEN_EQUAL, "expected equal sign");
-// 	consume(parser, TOKEN_FLOAT, "expected number");
+// 	consume(parser, TOKEN_EQUAL, "expected equal sign", "");
+// 	consume(parser, TOKEN_FLOAT, "expected number", "");
 
 // 	char *value = malloc(parser->previous->length * sizeof(char));
 // 	sprintf(value, "%s", parser->previous->start);
@@ -85,20 +85,20 @@ void build_int_var(parser_t *parser, char *name)
 // 	LLVMValueRef float_num = LLVMAddGlobal(module, LLVMFloatType(), name);
 // 	LLVMSetInitializer(float_num, LLVMFP, true);
 
-// 	consume(parser, TOKEN_SEMICOLON, "expected semicolon");
+// 	consume(parser, TOKEN_SEMICOLON, "expected semicolon", "");
 // }
 
 // TODO: add variables to a symbol table
 // gotta implement a symtable first
 void build_var(parser_t *parser)
 {
-	consume(parser, TOKEN_IDENTIFIER, "expected a variable name");
+	consume(parser, TOKEN_IDENTIFIER, "expected a variable name", "");
 	// store variable name
 	char *var_name = malloc(parser->previous->length * sizeof(char));
 	sprintf(var_name, "%.*s", parser->previous->length, parser->previous->start);
 
-	consume(parser, TOKEN_COLON, "expected a colon");
-	consume(parser, TOKEN_IDENTIFIER, "expected type name");
+	consume(parser, TOKEN_COLON, "expected a colon", "try adding a `:` here");
+	consume(parser, TOKEN_IDENTIFIER, "expected type name", "");
 
 	char *var_type = malloc(parser->previous->length * sizeof(char));
 	sprintf(var_type, "%.*s", parser->previous->length, parser->previous->start);

@@ -68,6 +68,9 @@ typedef struct
 {
 	char *start;
 	char *current;
+	char *source;
+	char *file_name;
+	FILE *file;
 	int line;
 	int offset;
 } lexer_t;
