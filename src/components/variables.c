@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "arc.h"
+#include "errors.h"
 #include "components/variables.h"
 #include "sym_table.h"
 
@@ -88,8 +89,22 @@ void build_int_var(parser_t *parser, char *name)
 // 	consume(parser, TOKEN_SEMICOLON, "expected semicolon", "");
 // }
 
-// TODO: add variables to a symbol table
-// gotta implement a symtable first
+void build_type_inferred_variable(parser_t *parser, char *var_name)
+{
+	if (match(parser, TOKEN_STRING))
+	{
+		build_str_var(parser, var_name);
+	}
+	else if (match(parser, TOKEN_NUMBER))
+	{
+		build_int_var(parser, var_name);
+	}
+	else
+	{
+		error_at_current(parser, "Could not automatically infer the type of the variable", "");
+	}
+}
+
 void build_var(parser_t *parser)
 {
 	consume(parser, TOKEN_IDENTIFIER, "expected a variable name", "");
@@ -98,21 +113,28 @@ void build_var(parser_t *parser)
 	sprintf(var_name, "%.*s", parser->previous->length, parser->previous->start);
 
 	consume(parser, TOKEN_COLON, "expected a colon", "try adding a `:` here");
-	consume(parser, TOKEN_IDENTIFIER, "expected type name", "");
-
-	char *var_type = malloc(parser->previous->length * sizeof(char));
-	sprintf(var_type, "%.*s", parser->previous->length, parser->previous->start);
-
-	if (strcmp(var_type, STR_TYPE) == 0)
+	if (match(parser, TOKEN_EQUAL))
 	{
-		build_str_var(parser, var_name);
+		build_type_inferred_variable(parser, var_name);
 	}
-	else if (strcmp(var_type, INT_TYPE) == 0)
+	else
 	{
-		build_int_var(parser, var_name);
+		consume(parser, TOKEN_IDENTIFIER, "expected type name", "");
+
+		char *var_type = malloc(parser->previous->length * sizeof(char));
+		sprintf(var_type, "%.*s", parser->previous->length, parser->previous->start);
+
+		if (strcmp(var_type, STR_TYPE) == 0)
+		{
+			build_str_var(parser, var_name);
+		}
+		else if (strcmp(var_type, INT_TYPE) == 0)
+		{
+			build_int_var(parser, var_name);
+		}
+		// else if (strcmp(var_type, FLOAT_TYPE) == 0)
+		// {
+		// 	build_float_var(parser, var_name);
+		// }
 	}
-	// else if (strcmp(var_type, FLOAT_TYPE) == 0)
-	// {
-	// 	build_float_var(parser, var_name);
-	// }
 }

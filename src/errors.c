@@ -8,13 +8,29 @@ void print_spaces(int num)
 
 void error_at_current(parser_t *parser, const char *msg, char *help_msg)
 {
-	int i = 1;
+
+	// int i = 0;
 	int line = parser->current->line;
-	char *tok = strtok(parser->lexer->source, "\n");
-	while (tok != NULL && i != line)
+	// printf("source :: %s\n", parser->lexer->source)
+	// char *tok = strtok(parser->lexer->source, "\n");
+	// while (tok != NULL)
+	// {
+	// 	tok = strtok(NULL, "\n");
+	// 	printf("line :: %s\n", tok);
+	// 	printf("i :: %d\n", i);
+	// 	printf("line_no :: %d\n", line);
+	// 	i++;
+	// }
+	// printf("line :: %s\n", tok);
+	FILE *fp = fopen(parser->lexer->file_name, "r");
+	char tok[8192];
+	int i = 0;
+	while (fgets(tok, sizeof(tok), fp) != NULL)
 	{
-		tok = strtok(NULL, "\n");
-		i++;
+		if (i == line)
+		{
+			break;
+		}
 	}
 
 	printf("%serror%s: %s\n", RED_BOLD, RESET, msg);

@@ -77,5 +77,6 @@ typedef struct
 
 lexer_t *init_lexer(char *source);
 token_t *scan_token(lexer_t *lexer);
+char *read_file(FILE *fp);
 
 #endif // LEXER_H

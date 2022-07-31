@@ -17,7 +17,6 @@ void build_fn(parser_t *parser)
 	sprintf(fn_name, "%.*s", parser->previous->length, parser->previous->start);
 	consume(parser, TOKEN_LEFT_PAREN, "expected a '(' name", "try adding a `(` here");
 
-	printf("fn name  :: `%s`\n", fn_name);
 	while (parser->current->type != TOKEN_RIGHT_PAREN)
 	{
 		consume(parser, TOKEN_IDENTIFIER, "expected argument name", "");
