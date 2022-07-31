@@ -1,5 +1,6 @@
 #include "arc.h"
 #include "llvm_cfg.h"
+#include "sym_table.h"
 #include "parser.h"
 #include "components/functions.h"
 
@@ -65,6 +66,8 @@ void build_fn(parser_t *parser)
 	{
 		declaration(parser);
 	}
+
+	set_symbol(SYMBOL_FN, fn_name, fn_type);
 
 	LLVMValueRef main_function = LLVMGetNamedFunction(module, "main");
 	LLVMBasicBlockRef main_entry = LLVMGetEntryBasicBlock(main_function);
