@@ -15,5 +15,6 @@ parser_t *init_parser(lexer_t *lexer);
 void parser_parse(parser_t *parser);
 void consume(parser_t *parser, token_type type, const char *message, char *help_msg);
 bool match(parser_t *parser, token_type type);
+void declaration(parser_t *parser);
 
 #endif // PARSER_H
