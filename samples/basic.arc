@@ -10,4 +10,3 @@ fn hi(){
 let a : int = 696969;
 let type_inffered_int := 13432423;
 let type_inffered_str := 13432423;
-let unable_to_type_inffer := {}; 
