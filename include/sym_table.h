@@ -4,7 +4,7 @@
 #include "arc.h"
 #include "llvm_cfg.h"
 
-#define TABLE_SIZE 20
+#define TABLE_SIZE 4096
 
 typedef enum
 {
