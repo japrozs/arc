@@ -50,6 +50,10 @@ void declaration(parser_t *parser)
 	{
 		build_var(parser);
 	}
+	else if (match(parser, TOKEN_FN))
+	{
+		build_fn(parser);
+	}
 	// else if (match(TOKEN_FN))
 	// {
 	// 	build_fn(module, builder, context);
